@@ -11,16 +11,6 @@ namespace Tree_Generic
     private T _value;
     private Node<T> _right;
     private Node<T> _left;
-    private int _weight;
-
-    /// <summary>
-    /// Gets/sets the nodes weight.
-    /// </summary>
-    public int Weight
-    {
-      get { return _weight; }
-      private set { _weight = value; }
-    }
 
     /// <summary>
     /// Value of the node.

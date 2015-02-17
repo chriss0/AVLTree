@@ -16,11 +16,13 @@ namespace Tree_Generic
     /// <param name="current">The current <paramref name="node"/></param>
     private void AutoBalanceTree(Node<T> current)
     {
-      if(current.Left != null)
-      CheckForRotateMethod(current.Left);
+      if (current.Left != null)
+        AutoBalanceTree(current.Left);
+
+      CheckForRotateMethod(current);
 
       if (current.Right != null)
-        CheckForRotateMethod(current.Right);
+        AutoBalanceTree(current.Right);
 
       return;
     }
@@ -39,21 +41,67 @@ namespace Tree_Generic
       {
         RotateLeftRight(current, current.Left);
       }
-      //else if (RightRight)
-      //{
-
-      //}
-      //else if(RightLeft)
-      //{
-
-      //}
+      else if (RightRight(current))
+      {
+        RotateRightRight(current, current.Right);
+      }
+      else if (RightLeft(current))
+      {
+        RotateRightLeft(current, current.Left);
+      }
     }
 
+    /// <summary>
+    /// Rotates the found <paramref name="node"/> on the right branch rightwards.
+    /// </summary>
+    /// <param name="parent">Node parent</param>
+    /// <param name="child">Node child</param>
+    private void RotateRightLeft(Node<T> parent, Node<T> child)
+    {
+      Node<T> nodeToAdd = child.Left;
+      if (parent == _root)
+      {
+        _root = child;
+        child.Left = parent;
+        parent.Right = nodeToAdd;
+      }
+      else
+      {
+        child.Left = parent;
+        parent.Right = nodeToAdd;
+      }
+    }
+
+    /// <summary>
+    /// Rotates the found <paramref name="node"/> on the right branch leftwards.
+    /// </summary>
+    /// <param name="parent">Node parent</param>
+    /// <param name="child">Node child</param>
+    private void RotateRightRight(Node<T> parent, Node<T> child) //TODO: Check this implementation - is actually only the opposite of LeftLeft()
+    {
+      Node<T> nodeToAdd = child.Left;
+      if (parent == _root)
+      {
+        _root = child;
+        child.Left = parent;
+        parent.Right = nodeToAdd;
+      }
+      else
+      {
+        child.Left = parent;
+        parent.Right = nodeToAdd;
+      }
+    }
+
+    /// <summary>
+    /// Rotates the found value on the left branch leftwards.
+    /// </summary>
+    /// <param name="parent"><paramref name=""/></param>
+    /// <param name="child"></param>
     private void RotateLeftRight(Node<T> parent, Node<T> child)
     {
       Node<T> nodeToAdd = child.Right.Left;
       Node<T> current = parent.Left;
-
       parent.Left = child.Right;
       parent.Left.Left = child;
       child.Right = nodeToAdd;
@@ -63,14 +111,13 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Rotates the found Node leftwards
+    /// Rotates the found Node on the left branch rightwards.
     /// </summary>
     /// <param name="parent">Node parent</param>
     /// <param name="child">Node child</param>
     private void RotateLeftLeft(Node<T> parent, Node<T> child)
     {
       Node<T> nodeToAdd = child.Right;
-
       if (parent == _root)
       {
         _root = child;
@@ -85,13 +132,39 @@ namespace Tree_Generic
     }
 
     /// <summary>
+    /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch. 
+    /// </summary>
+    /// <param name="parent">The parent node</param>
+    /// <returns>Whether or not the right-right-case is true</returns>
+    private bool RightRight(Node<T> parent)
+    {
+      if (CalculateBalanceFactor(parent.Left) < -1 && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
+        return true;
+      else
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if the child of <paramref name="parent"/> has a  longer left branch than its right branch.
+    /// </summary>
+    /// <param name="parent">The parent node</param>
+    /// <returns>Wheter or not the right-left-case is true</returns>
+    private bool RightLeft(Node<T> parent)
+    {
+      if (CalculateBalanceFactor(parent.Right) > 1 && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
+        return true;
+      else
+        return false;
+    }
+
+    /// <summary>
     /// Returns true if the child of <paramref name="parent"/> has a longer left branch than its right branch.
     /// </summary>
     /// <param name="current">T</param>
     /// <returns>Whether or not the left-left-case is true</returns>
     private bool LeftLeft(Node<T> parent)
     {
-      if (CalculateHeight(parent.Left) > CalculateHeight(parent.Right) && (CalculateBalanceFactor(parent.Left) == 0 || CalculateBalanceFactor(parent.Left) == 1))
+      if ((CalculateBalanceFactor(parent.Left) == 0 || CalculateBalanceFactor(parent.Left) == 1) && CalculateHeight(parent.Left) > CalculateHeight(parent.Right) ) // Wrong!!!!!!!!!!!!!!!!!!!!!!
         return true;
       else
         return false;
@@ -104,7 +177,7 @@ namespace Tree_Generic
     /// <returns></returns>
     private bool LeftRight(Node<T> parent)
     {
-      if (CalculateHeight(parent.Left) > CalculateHeight(parent.Right) && CalculateBalanceFactor(parent.Left) > 1)
+      if (CalculateBalanceFactor(parent.Left) > 1 && CalculateHeight(parent.Left) > CalculateHeight(parent.Right))
         return true;
       else
         return false;
