@@ -30,23 +30,44 @@ namespace UnitTest
 
       return testTree;
     }
+    
+    /// <summary>
+    /// Test if the rotation for a left-left-case works properly.
+    /// </summary>
+    [TestMethod]
+    public void LeftLeftTest()
+    {
+      var leftLeftTree = new Tree<int>();
 
-    ///// <summary>
-    ///// Checks whether the balancefactors of each <paramref name="node"/> have been calculated correctly.
-    ///// </summary>
-    //[TestMethod]
-    //public void BalanceFactorTest()
-    //{
-    //  Tree<int> balanceTree = InitializeIntTree();
-    //  Assert.AreEqual(2, balanceTree.CalculateBalanceFactor(5));
-    //  Assert.AreEqual(3, balanceTree.CalculateBalanceFactor(8));
-    //  Assert.AreEqual(-1, balanceTree.CalculateBalanceFactor(51));
-    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(1));
-    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(4));
-    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(3));
-    //  Assert.AreEqual(-1, balanceTree.CalculateBalanceFactor(25));
-    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(10));
-    //}
+      leftLeftTree.Add(20);
+      leftLeftTree.Add(10);
+      leftLeftTree.Add(5);
+      leftLeftTree.Add(30);
+      leftLeftTree.Add(4);
+
+      int[] testArray = leftLeftTree.ConvertToArray();
+      Assert.AreEqual(5, leftLeftTree.Count());
+      Assert.AreEqual(10, testArray[2]);
+      Assert.AreEqual(10, leftLeftTree.Root.Value);
+      Assert.AreEqual(5, leftLeftTree.Root.Left.Value);
+      Assert.AreEqual(4, leftLeftTree.Root.Left.Left.Value);
+      Assert.AreEqual(20, leftLeftTree.Root.Right.Value);
+      Assert.AreEqual(30, leftLeftTree.Root.Right.Right.Value);
+
+      leftLeftTree = new Tree<int>();
+      leftLeftTree.Add(20);
+      leftLeftTree.Add(10);
+      leftLeftTree.Add(5);
+      leftLeftTree.Add(30);
+      leftLeftTree.Add(4);
+      leftLeftTree.Add(6);
+      Assert.AreEqual(10, leftLeftTree.Root.Value);
+      Assert.AreEqual(5, leftLeftTree.Root.Left.Value);
+      Assert.AreEqual(4, leftLeftTree.Root.Left.Left.Value);
+      Assert.AreEqual(20, leftLeftTree.Root.Right.Value);
+      Assert.AreEqual(6, leftLeftTree.Root.Left.Right.Value);
+      Assert.AreEqual(30, leftLeftTree.Root.Right.Right.Value);
+    }
 
     /// <summary>
     /// Checks wether there have values been added to the tree.

@@ -6,7 +6,7 @@ namespace Tree_Generic
   /// Represents a node of a tree.
   /// </summary>
   /// <typeparam name="T">DataType of the value</typeparam>
-  class Node<T> where T : IComparable<T>
+  public class Node<T> where T : IComparable<T>
   {
     private T _value;
     private Node<T> _right;

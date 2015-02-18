@@ -11,6 +11,16 @@ namespace Tree_Generic
     private Node<T> _root;
 
     /// <summary>
+    /// Gets/sets the <paramref name="_root"/>. 
+    /// Only needed for testing purposes.
+    /// </summary>
+    public Node<T> Root
+    {
+      get { return _root; }
+      private set { _root = value; }
+    }
+
+    /// <summary>
     /// Checks each node by its <paramref name="balanceFactor"/> if balancing is needed. //TODO: Is it legal to comment this way as "balanceFactor" is never assigned
     /// </summary>
     /// <param name="current">The current <paramref name="node"/></param>
@@ -56,7 +66,7 @@ namespace Tree_Generic
     /// </summary>
     /// <param name="current">T</param>
     /// <returns>Whether or not the left-left-case is true</returns>
-    private bool LeftLeft(Node<T> parent) //Check
+    private bool LeftLeft(Node<T> parent) //Correct
     {
       if (CalculateBalanceFactor(parent) == 2 && CalculateHeight(parent.Left) > CalculateHeight(parent.Right) &&
          (CalculateBalanceFactor(parent.Left) == 0 || CalculateBalanceFactor(parent.Left) == 1))
@@ -99,7 +109,7 @@ namespace Tree_Generic
     /// <returns>Wheter or not the right-left-case is true</returns>
     private bool RightLeft(Node<T> parent) //Check
     {
-      if (CalculateBalanceFactor(parent) == -2 && (CalculateBalanceFactor(parent.Right) == 1|| CalculateBalanceFactor(parent.Right) == 0) && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
+      if (CalculateBalanceFactor(parent) == -2 && (CalculateBalanceFactor(parent.Right) == 1 || CalculateBalanceFactor(parent.Right) == 0) && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
         return true;
       else
         return false;
@@ -175,16 +185,17 @@ namespace Tree_Generic
     /// </summary>
     /// <param name="parent">Node parent</param>
     /// <param name="child">Node child</param>
-    private void RotateLeftLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
+    private void RotateLeftLeft(Node<T> parent, Node<T> child, Node<T> grandParent) //Works for all cases
     {
-      Node<T> nodeToAdd = child.Left;
+      Node<T> nodeToAdd = child.Right;
 
-      if (parent == _root)
+      if (parent == _root || grandParent == null) // in case that the tree only exists of three nodes each on the left of the other
       {
         _root = child;
         child.Right = parent;
         parent.Left = nodeToAdd;
       }
+
       else
       {
         grandParent.Left = child;
@@ -500,17 +511,5 @@ namespace Tree_Generic
       else
         current.Right = nodeToAdd;
     }
-
-
-    ///// <summary>
-    ///// Calls GetNodeToCalculate() to find the <paramref name="node"/> of which the balancefactor is to be calculated.
-    ///// </summary>
-    ///// <param name="value">The value of the <paramref name="node"/> of which the balancefactor is wanted</param>
-    ///// <returns>The balancefactor of the node</returns>
-    //public int CalculateBalanceFactor(T value)
-    //{
-    //  int balanceFactor = GetNodeToCalculate(_root, value);
-    //  return balanceFactor;
-    //}
   }
 }
