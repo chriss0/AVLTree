@@ -7,14 +7,11 @@ namespace Tree_Generic
     static void Main(string[] args) 
     {
       var testTree = new Tree<int>();
-      testTree.Add(5);
-      testTree.Add(8);
-      testTree.Add(3);
-      testTree.Add(1);
-      testTree.Add(51);
-      testTree.Add(81);
-      testTree.Add(25);
+      testTree.Add(20);
+      testTree.Add(30);
       testTree.Add(10);
+      testTree.Add(5);
+      testTree.Add(9);
       testTree.Count();
 
       int[] arr = testTree.ConvertToArray();

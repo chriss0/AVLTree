@@ -31,22 +31,22 @@ namespace UnitTest
       return testTree;
     }
 
-    /// <summary>
-    /// Checks whether the balancefactors of each <paramref name="node"/> have been calculated correctly.
-    /// </summary>
-    [TestMethod]
-    public void BalanceFactorTest()
-    {
-      Tree<int> balanceTree = InitializeIntTree();
-      Assert.AreEqual(2, balanceTree.CalculateBalanceFactor(5));
-      Assert.AreEqual(3, balanceTree.CalculateBalanceFactor(8));
-      Assert.AreEqual(-1, balanceTree.CalculateBalanceFactor(51));
-      Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(1));
-      Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(4));
-      Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(3));
-      Assert.AreEqual(-1, balanceTree.CalculateBalanceFactor(25));
-      Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(10));
-    }
+    ///// <summary>
+    ///// Checks whether the balancefactors of each <paramref name="node"/> have been calculated correctly.
+    ///// </summary>
+    //[TestMethod]
+    //public void BalanceFactorTest()
+    //{
+    //  Tree<int> balanceTree = InitializeIntTree();
+    //  Assert.AreEqual(2, balanceTree.CalculateBalanceFactor(5));
+    //  Assert.AreEqual(3, balanceTree.CalculateBalanceFactor(8));
+    //  Assert.AreEqual(-1, balanceTree.CalculateBalanceFactor(51));
+    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(1));
+    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(4));
+    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(3));
+    //  Assert.AreEqual(-1, balanceTree.CalculateBalanceFactor(25));
+    //  Assert.AreEqual(0, balanceTree.CalculateBalanceFactor(10));
+    //}
 
     /// <summary>
     /// Checks wether there have values been added to the tree.

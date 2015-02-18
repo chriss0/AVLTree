@@ -14,15 +14,15 @@ namespace Tree_Generic
     /// Checks each node by its <paramref name="balanceFactor"/> if balancing is needed. //TODO: Is it legal to comment this way as "balanceFactor" is never assigned
     /// </summary>
     /// <param name="current">The current <paramref name="node"/></param>
-    private void AutoBalanceTree(Node<T> current)
+    private void AutoBalanceTree(Node<T> previous, Node<T> current)
     {
       if (current.Left != null)
-        AutoBalanceTree(current.Left);
+        AutoBalanceTree(current, current.Left);
 
-      CheckForRotateMethod(current);
+      CheckForRotateMethod(current, previous);
 
       if (current.Right != null)
-        AutoBalanceTree(current.Right);
+        AutoBalanceTree(current, current.Right);
 
       return;
     }
@@ -31,24 +31,78 @@ namespace Tree_Generic
     /// Checks wheter autobalancing is needed and if so, which rotate-method is to be performed
     /// </summary>
     /// <param name="current">The current node that is checked</param>
-    private void CheckForRotateMethod(Node<T> current)
+    private void CheckForRotateMethod(Node<T> current, Node<T> previous)
     {
       if (LeftLeft(current))
       {
-        RotateLeftLeft(current, current.Left);
+        RotateLeftLeft(current, current.Left, previous); //Correct
       }
-      else if (LeftRight(current))
-      {
-        RotateLeftRight(current, current.Left);
-      }
-      else if (RightRight(current))
-      {
-        RotateRightRight(current, current.Right);
-      }
-      else if (RightLeft(current))
-      {
-        RotateRightLeft(current, current.Left);
-      }
+      //else if (LeftRight(current))
+      //{
+      //  RotateLeftRight(current, current.Left, previous);
+      //}
+      //else if (RightRight(current))
+      //{
+      //  RotateRightRight(current, current.Right, previous); //Correct
+      //}
+      //else if (RightLeft(current))
+      //{
+      //  RotateRightLeft(current, current.Left, previous);
+      //}
+    }
+
+    /// <summary>
+    /// Returns true if the child of <paramref name="parent"/> has a longer left branch than its right branch.
+    /// </summary>
+    /// <param name="current">T</param>
+    /// <returns>Whether or not the left-left-case is true</returns>
+    private bool LeftLeft(Node<T> parent) //Check
+    {
+      if (CalculateBalanceFactor(parent) == 2 && CalculateHeight(parent.Left) > CalculateHeight(parent.Right) &&
+         (CalculateBalanceFactor(parent.Left) == 0 || CalculateBalanceFactor(parent.Left) == 1))
+        return true;
+      else
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <returns></returns>
+    private bool LeftRight(Node<T> parent) //Check
+    {
+      if (CalculateBalanceFactor(parent) == 2 && (CalculateBalanceFactor(parent.Left) == -1 || CalculateBalanceFactor(parent.Left) == 0) && CalculateHeight(parent.Left) > CalculateHeight(parent.Right))
+        return true;
+      else
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch. 
+    /// </summary>
+    /// <param name="parent">The parent node</param>
+    /// <returns>Whether or not the right-right-case is true</returns>
+    private bool RightRight(Node<T> parent) //Check
+    {
+      if (CalculateBalanceFactor(parent) == -2 && CalculateHeight(parent.Right) > CalculateHeight(parent.Left) &&
+         (CalculateBalanceFactor(parent.Right) == -1 || CalculateBalanceFactor(parent.Right) == 0))
+        return true;
+      else
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if the child of <paramref name="parent"/> has a  longer left branch than its right branch.
+    /// </summary>
+    /// <param name="parent">The parent node</param>
+    /// <returns>Wheter or not the right-left-case is true</returns>
+    private bool RightLeft(Node<T> parent) //Check
+    {
+      if (CalculateBalanceFactor(parent) == -2 && (CalculateBalanceFactor(parent.Right) == 1|| CalculateBalanceFactor(parent.Right) == 0) && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
+        return true;
+      else
+        return false;
     }
 
     /// <summary>
@@ -56,7 +110,7 @@ namespace Tree_Generic
     /// </summary>
     /// <param name="parent">Node parent</param>
     /// <param name="child">Node child</param>
-    private void RotateRightLeft(Node<T> parent, Node<T> child)
+    private void RotateRightLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Left;
       if (parent == _root)
@@ -77,9 +131,10 @@ namespace Tree_Generic
     /// </summary>
     /// <param name="parent">Node parent</param>
     /// <param name="child">Node child</param>
-    private void RotateRightRight(Node<T> parent, Node<T> child) //TODO: Check this implementation - is actually only the opposite of LeftLeft()
+    private void RotateRightRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Left;
+
       if (parent == _root)
       {
         _root = child;
@@ -88,6 +143,7 @@ namespace Tree_Generic
       }
       else
       {
+        grandParent.Right = child;
         child.Left = parent;
         parent.Right = nodeToAdd;
       }
@@ -98,16 +154,20 @@ namespace Tree_Generic
     /// </summary>
     /// <param name="parent"><paramref name=""/></param>
     /// <param name="child"></param>
-    private void RotateLeftRight(Node<T> parent, Node<T> child)
+    private void RotateLeftRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Right.Left;
-      Node<T> current = parent.Left;
-      parent.Left = child.Right;
-      parent.Left.Left = child;
-      child.Right = nodeToAdd;
-      child = parent.Left;
+      Node<T> current;
 
-      RotateLeftLeft(parent, child);
+
+      current = child;
+      parent.Left = child.Right;
+      child = parent.Left;
+      child.Left = current;
+      current.Right = nodeToAdd;
+      parent.Left = child;
+
+      RotateLeftLeft(parent, child, grandParent);
     }
 
     /// <summary>
@@ -115,9 +175,10 @@ namespace Tree_Generic
     /// </summary>
     /// <param name="parent">Node parent</param>
     /// <param name="child">Node child</param>
-    private void RotateLeftLeft(Node<T> parent, Node<T> child)
+    private void RotateLeftLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
-      Node<T> nodeToAdd = child.Right;
+      Node<T> nodeToAdd = child.Left;
+
       if (parent == _root)
       {
         _root = child;
@@ -126,61 +187,10 @@ namespace Tree_Generic
       }
       else
       {
+        grandParent.Left = child;
         child.Right = parent;
         parent.Left = nodeToAdd;
       }
-    }
-
-    /// <summary>
-    /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch. 
-    /// </summary>
-    /// <param name="parent">The parent node</param>
-    /// <returns>Whether or not the right-right-case is true</returns>
-    private bool RightRight(Node<T> parent)
-    {
-      if (CalculateBalanceFactor(parent.Left) < -1 && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
-        return true;
-      else
-        return false;
-    }
-
-    /// <summary>
-    /// Returns true if the child of <paramref name="parent"/> has a  longer left branch than its right branch.
-    /// </summary>
-    /// <param name="parent">The parent node</param>
-    /// <returns>Wheter or not the right-left-case is true</returns>
-    private bool RightLeft(Node<T> parent)
-    {
-      if (CalculateBalanceFactor(parent.Right) > 1 && CalculateHeight(parent.Right) > CalculateHeight(parent.Left))
-        return true;
-      else
-        return false;
-    }
-
-    /// <summary>
-    /// Returns true if the child of <paramref name="parent"/> has a longer left branch than its right branch.
-    /// </summary>
-    /// <param name="current">T</param>
-    /// <returns>Whether or not the left-left-case is true</returns>
-    private bool LeftLeft(Node<T> parent)
-    {
-      if ((CalculateBalanceFactor(parent.Left) == 0 || CalculateBalanceFactor(parent.Left) == 1) && CalculateHeight(parent.Left) > CalculateHeight(parent.Right) ) // Wrong!!!!!!!!!!!!!!!!!!!!!!
-        return true;
-      else
-        return false;
-    }
-
-    /// <summary>
-    /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch.
-    /// </summary>
-    /// <param name="parent"></param>
-    /// <returns></returns>
-    private bool LeftRight(Node<T> parent)
-    {
-      if (CalculateBalanceFactor(parent.Left) > 1 && CalculateHeight(parent.Left) > CalculateHeight(parent.Right))
-        return true;
-      else
-        return false;
     }
 
     /// <summary>
@@ -193,7 +203,7 @@ namespace Tree_Generic
       if (node == null)
         return 0;
       else
-        return CalculateHeight(node.Right) - CalculateHeight(node.Left);
+        return CalculateHeight(node.Left) - CalculateHeight(node.Right);
     }
 
     /// <summary>
@@ -207,17 +217,6 @@ namespace Tree_Generic
         return 0;
       else
         return 1 + Math.Max(CalculateHeight(node.Left), CalculateHeight(node.Right));
-    }
-
-    /// <summary>
-    /// Calls GetNodeToCalculate() to find the <paramref name="node"/> of which the balancefactor is to be calculated.
-    /// </summary>
-    /// <param name="value">The value of the <paramref name="node"/> of which the balancefactor is wanted</param>
-    /// <returns>The balancefactor of the node</returns>
-    public int CalculateBalanceFactor(T value)
-    {
-      int balanceFactor = GetNodeToCalculate(_root, value);
-      return balanceFactor;
     }
 
     /// <summary>
@@ -408,7 +407,7 @@ namespace Tree_Generic
           AddLeft(current, nodeToAdd);
       }
 
-      AutoBalanceTree(_root); //--------------------------------------------------------------------------------------------------------------------------------
+      AutoBalanceTree(null, _root);
 
     }
 
@@ -501,5 +500,17 @@ namespace Tree_Generic
       else
         current.Right = nodeToAdd;
     }
+
+
+    ///// <summary>
+    ///// Calls GetNodeToCalculate() to find the <paramref name="node"/> of which the balancefactor is to be calculated.
+    ///// </summary>
+    ///// <param name="value">The value of the <paramref name="node"/> of which the balancefactor is wanted</param>
+    ///// <returns>The balancefactor of the node</returns>
+    //public int CalculateBalanceFactor(T value)
+    //{
+    //  int balanceFactor = GetNodeToCalculate(_root, value);
+    //  return balanceFactor;
+    //}
   }
 }
