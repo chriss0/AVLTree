@@ -45,20 +45,20 @@ namespace Tree_Generic
     {
       if (LeftLeft(current))
       {
-        RotateLeftLeft(current, current.Left, previous); //Correct
+        RotateLeftLeft(current, current.Left, previous);
       }
-      //else if (LeftRight(current))
-      //{
-      //  RotateLeftRight(current, current.Left, previous);
-      //}
-      //else if (RightRight(current))
-      //{
-      //  RotateRightRight(current, current.Right, previous); //Correct
-      //}
-      //else if (RightLeft(current))
-      //{
-      //  RotateRightLeft(current, current.Left, previous);
-      //}
+      else if (LeftRight(current))
+      {
+        RotateLeftRight(current, current.Left, previous);
+      }
+      else if (RightRight(current))
+      {
+        RotateRightRight(current, current.Right, previous);
+      }
+      else if (RightLeft(current))
+      {
+        RotateRightLeft(current, current.Right, previous);
+      }
     }
 
     /// <summary>
@@ -122,18 +122,12 @@ namespace Tree_Generic
     /// <param name="child">Node child</param>
     private void RotateRightLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
-      Node<T> nodeToAdd = child.Left;
-      if (parent == _root)
-      {
-        _root = child;
-        child.Left = parent;
-        parent.Right = nodeToAdd;
-      }
-      else
-      {
-        child.Left = parent;
-        parent.Right = nodeToAdd;
-      }
+      Node<T> current = child.Left;
+      Node<T> nodeToAdd = current.Right;
+      parent.Right = child.Left;
+      child.Left = null;
+      parent.Right.Right = child;
+      child.Left = nodeToAdd;
     }
 
     /// <summary>
@@ -144,11 +138,11 @@ namespace Tree_Generic
     private void RotateRightRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Left;
-
-      if (parent == _root)
+      if (parent == _root || grandParent == null)
       {
         _root = child;
-        child.Left = parent;
+        parent.Right = null;
+        _root.Left = parent;
         parent.Right = nodeToAdd;
       }
       else
@@ -166,33 +160,28 @@ namespace Tree_Generic
     /// <param name="child"></param>
     private void RotateLeftRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
-      Node<T> nodeToAdd = child.Right.Left;
-      Node<T> current;
-
-
-      current = child;
+      Node<T> current = child.Right;
+      Node<T> nodeToAdd = current.Left;
       parent.Left = child.Right;
-      child = parent.Left;
-      child.Left = current;
-      current.Right = nodeToAdd;
-      parent.Left = child;
-
-      RotateLeftLeft(parent, child, grandParent);
+      child.Right = null;
+      parent.Left.Left = child;
+      child.Right = nodeToAdd;
     }
 
-    /// <summary>
-    /// Rotates the found Node on the left branch rightwards.
-    /// </summary>
-    /// <param name="parent">Node parent</param>
-    /// <param name="child">Node child</param>
-    private void RotateLeftLeft(Node<T> parent, Node<T> child, Node<T> grandParent) //Works for all cases
+    //<summary>
+    //Rotates the found Node on the left branch rightwards.
+    //</summary>
+    //<param name="parent">Node parent</param>
+    //<param name="child">Node child</param>
+    private void RotateLeftLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Right;
 
       if (parent == _root || grandParent == null) // in case that the tree only exists of three nodes each on the left of the other
       {
         _root = child;
-        child.Right = parent;
+        parent.Left = null;
+        _root.Right = parent;
         parent.Left = nodeToAdd;
       }
 
