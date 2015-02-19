@@ -27,7 +27,6 @@ namespace UnitTest
       testTree.Add(81);
       testTree.Add(25);
       testTree.Add(10);
-
       return testTree;
     }
 
@@ -40,16 +39,16 @@ namespace UnitTest
       //Case that root is not parent:
       var leftRightTree = new Tree<int>();
       leftRightTree.Add(20);
+      leftRightTree.Add(9);
+      leftRightTree.Add(5);
       leftRightTree.Add(10);
       leftRightTree.Add(30);
-      leftRightTree.Add(5);
-      leftRightTree.Add(9);
 
-      Assert.AreEqual(20, leftRightTree.Root.Value);
-      Assert.AreEqual(9, leftRightTree.Root.Left.Value);
-      Assert.AreEqual(5, leftRightTree.Root.Left.Left.Value);
-      Assert.AreEqual(10, leftRightTree.Root.Left.Right.Value);
-      Assert.AreEqual(30, leftRightTree.Root.Right.Value);
+      Assert.AreEqual(9, leftRightTree.Root.Value);
+      Assert.AreEqual(5, leftRightTree.Root.Left.Value);
+      Assert.AreEqual(20, leftRightTree.Root.Right.Value);
+      Assert.AreEqual(30, leftRightTree.Root.Right.Right.Value);
+      Assert.AreEqual(10, leftRightTree.Root.Right.Left.Value);
 
       ////Case that root is parent:
       leftRightTree = new Tree<int>();
@@ -65,7 +64,7 @@ namespace UnitTest
     [TestMethod]
     public void RightLeftTest()
     {
-      //Case that root is parent
+      //Case that root is parent:
       var rightLeftTree = new Tree<int>();
       rightLeftTree.Add(20);
       rightLeftTree.Add(30);
@@ -74,6 +73,19 @@ namespace UnitTest
       Assert.AreEqual(25, rightLeftTree.Root.Value);
       Assert.AreEqual(30, rightLeftTree.Root.Right.Value);
       Assert.AreEqual(20, rightLeftTree.Root.Left.Value);
+
+      //Case that root is not parent:
+      rightLeftTree = new Tree<int>();
+      rightLeftTree.Add(20);
+      rightLeftTree.Add(30);
+      rightLeftTree.Add(10);
+      rightLeftTree.Add(35);
+      rightLeftTree.Add(32);
+      Assert.AreEqual(20, rightLeftTree.Root.Value);
+      Assert.AreEqual(10, rightLeftTree.Root.Left.Value);
+      Assert.AreEqual(32, rightLeftTree.Root.Right.Value);
+      Assert.AreEqual(35, rightLeftTree.Root.Right.Right.Value);
+      Assert.AreEqual(30, rightLeftTree.Root.Right.Left.Value);
     }
 
     /// <summary>
@@ -106,7 +118,7 @@ namespace UnitTest
       Assert.AreEqual(20, rightRightTree.Root.Left.Value);
       Assert.AreEqual(40, rightRightTree.Root.Right.Value);
     }
-    
+
     /// <summary>
     /// Tests if the rotation for a left-left-case works properly.
     /// </summary>
@@ -115,12 +127,12 @@ namespace UnitTest
     {
       var leftLeftTree = new Tree<int>();
 
+      //Case that root is parent
       leftLeftTree.Add(20);
       leftLeftTree.Add(10);
       leftLeftTree.Add(5);
       leftLeftTree.Add(30);
       leftLeftTree.Add(4);
-
       Assert.AreEqual(5, leftLeftTree.Count());
       Assert.AreEqual(10, leftLeftTree.Root.Value);
       Assert.AreEqual(5, leftLeftTree.Root.Left.Value);
@@ -135,12 +147,16 @@ namespace UnitTest
       leftLeftTree.Add(30);
       leftLeftTree.Add(4);
       leftLeftTree.Add(6);
+      leftLeftTree.Add(3);
+      leftLeftTree.Add(2);
       Assert.AreEqual(10, leftLeftTree.Root.Value);
       Assert.AreEqual(5, leftLeftTree.Root.Left.Value);
-      Assert.AreEqual(4, leftLeftTree.Root.Left.Left.Value);
+      Assert.AreEqual(3, leftLeftTree.Root.Left.Left.Value);
       Assert.AreEqual(20, leftLeftTree.Root.Right.Value);
       Assert.AreEqual(6, leftLeftTree.Root.Left.Right.Value);
       Assert.AreEqual(30, leftLeftTree.Root.Right.Right.Value);
+      Assert.AreEqual(2, leftLeftTree.Root.Left.Left.Left.Value);
+      Assert.AreEqual(4, leftLeftTree.Root.Left.Left.Right.Value);
     }
 
     /// <summary>

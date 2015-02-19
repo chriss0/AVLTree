@@ -138,16 +138,26 @@ namespace Tree_Generic
     private void RotateRightRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Left;
+
+
       if (parent == _root || grandParent == null)
       {
         _root = child;
         parent.Right = null;
         _root.Left = parent;
         parent.Right = nodeToAdd;
+
       }
-      else
+      else if (parent == grandParent.Right)
       {
         grandParent.Right = child;
+        child.Left = parent;
+        parent.Right = nodeToAdd;
+      }
+
+      else if (parent == grandParent.Left)
+      {
+        grandParent.Left = child;
         child.Left = parent;
         parent.Right = nodeToAdd;
       }
@@ -185,7 +195,14 @@ namespace Tree_Generic
         parent.Left = nodeToAdd;
       }
 
-      else
+      else if (parent == grandParent.Right && grandParent != _root)
+      {
+        grandParent.Right = child;
+        child.Right = parent;
+        parent.Left = nodeToAdd;
+      }
+
+      else if(parent == grandParent.Left && grandParent != _root)
       {
         grandParent.Left = child;
         child.Right = parent;
