@@ -11,7 +11,7 @@ namespace Tree_Generic
     private Node<T> _root;
 
     /// <summary>
-    /// Gets/sets the <paramref name="_root"/>. 
+    /// Gets/sets the _root. 
     /// Only needed for testing purposes.
     /// </summary>
     public Node<T> Root
@@ -21,9 +21,9 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Checks each node by its <paramref name="balanceFactor"/> if balancing is needed.
+    /// Checks each node by its balanceFactor if balancing is needed.
     /// </summary>
-    /// <param name="current">The current <paramref name="node"/>.</param>
+    /// <param name="current">The current node.</param>
     private void AutoBalanceTree(Node<T> previous, Node<T> current)
     {
       if (current.Left != null)
@@ -40,7 +40,7 @@ namespace Tree_Generic
     /// <summary>
     /// Checks wheter autobalancing is needed and if so, which rotate-method is to be performed.
     /// </summary>
-    /// <param name="current">The current <paramref name="node"/> that is checked.</param>
+    /// <param name="current">The current node that is checked.</param>
     private void CheckForRotateMethod(Node<T> current, Node<T> previous)
     {
       if (LeftLeft(current))
@@ -64,7 +64,7 @@ namespace Tree_Generic
     /// <summary>
     /// Returns true if the child of <paramref name="parent"/> has a longer left branch than its right branch.
     /// </summary>
-    /// <param name="current">The Current <paramref name="node"/>.</param>
+    /// <param name="current">The Current node.</param>
     /// <returns>Whether or not the left-left-case is true.</returns>
     private bool LeftLeft(Node<T> parent) //Correct
     {
@@ -78,7 +78,7 @@ namespace Tree_Generic
     /// <summary>
     /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch.
     /// </summary>
-    /// <param name="parent">The Parent <paramref name="node"/>.</param>
+    /// <param name="parent">The Parent node.</param>
     /// <returns>Wheter or not the left-right.case is true.</returns>
     private bool LeftRight(Node<T> parent) //Check
     {
@@ -92,7 +92,7 @@ namespace Tree_Generic
     /// <summary>
     /// Returns true if the child of <paramref name="parent"/> has a longer right branch than its left branch. 
     /// </summary>
-    /// <param name="parent">The parent <paramref name="node"/>.</param>
+    /// <param name="parent">The parent node.</param>
     /// <returns>Whether or not the right-right-case is true.</returns>
     private bool RightRight(Node<T> parent) //Check
     {
@@ -106,7 +106,7 @@ namespace Tree_Generic
     /// <summary>
     /// Returns true if the child of <paramref name="parent"/> has a  longer left branch than its right branch.
     /// </summary>
-    /// <param name="parent">The parent <paramref name="node"/>.</param>
+    /// <param name="parent">The parent node.</param>
     /// <returns>Wheter or not the right-left-case is true.</returns>
     private bool RightLeft(Node<T> parent)
     {
@@ -118,10 +118,10 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Rotates the found <paramref name="node"/> on the right branch rightwards.
+    /// Rotates the found node on the right branch rightwards.
     /// </summary>
-    /// <param name="parent">The parent <paramref name="node"/>.</param>
-    /// <param name="child">The child <paramref name="node"/>.</param>
+    /// <param name="parent">The parent node.</param>
+    /// <param name="child">The child node.</param>
     private void RotateRightLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> current = child.Left;
@@ -133,10 +133,10 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Rotates the found <paramref name="node"/> on the right branch leftwards.
+    /// Rotates the found node on the right branch leftwards.
     /// </summary>
-    /// <param name="parent">The parent <paramref name="node"/>.</param>
-    /// <param name="child">The child <paramref name="node"/>.</param>
+    /// <param name="parent">The parent node.</param>
+    /// <param name="child">The child node.</param>
     private void RotateRightRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Left;
@@ -165,8 +165,8 @@ namespace Tree_Generic
     /// <summary>
     /// Rotates the found value on the left branch leftwards.
     /// </summary>
-    /// <param name="parent">The parent <paramref name="node"/><paramref name=""/>.</param>
-    /// <param name="child">The child <paramref name="node"/>.</param>
+    /// <param name="parent">The parent node.</param>
+    /// <param name="child">The child node.</param>
     private void RotateLeftRight(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> current = child.Right;
@@ -180,8 +180,8 @@ namespace Tree_Generic
     //<summary>
     //Rotates the found Node on the left branch rightwards.
     //</summary>
-    //<param name="parent">The parent.</param>
-    //<param name="child">The child </paramref name ="node"/>.</param>
+    //<param name="parent">The parent node.</param>
+    //<param name="child">The child node.</param>
     private void RotateLeftLeft(Node<T> parent, Node<T> child, Node<T> grandParent)
     {
       Node<T> nodeToAdd = child.Right;
@@ -191,15 +191,15 @@ namespace Tree_Generic
         _root = child;
         parent.Left = null;
         _root.Right = parent;
-        parent.Left = nodeToAdd;      
+        parent.Left = nodeToAdd;
       }
-      else if (parent == grandParent.Right && grandParent != _root)
+      else if (parent == grandParent.Right)
       {
         grandParent.Right = child;
         child.Right = parent;
         parent.Left = nodeToAdd;
       }
-      else if(parent == grandParent.Left && grandParent != _root)
+      else if (parent == grandParent.Left)
       {
         grandParent.Left = child;
         child.Right = parent;
@@ -220,6 +220,18 @@ namespace Tree_Generic
         return CalculateHeight(node.Left) - CalculateHeight(node.Right);
     }
 
+    /// <summary>
+    /// Calculates the height of the current tree.
+    /// </summary>
+    /// <returns>Height of the tree.</returns>
+    public int CalculateHeight()
+    {
+      if (_root == null)
+        return 0;
+      else
+        return CalculateHeight(_root);
+    }
+
     /// <summary>
     /// Counts the number of tree levels of <paramref name="node"/>.
     /// </summary>
@@ -234,32 +246,14 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Finds the <paramref name="node"/> of which the balancefactor is to be calculated.
-    /// </summary>
-    /// <param name="current">The current <paramref name="node"/> that is checked by its value.</param>
-    /// <param name="value">The value that is searched for.</param>
-    /// <returns></returns>
-    private int GetNodeToCalculate(Node<T> current, T value)
-    {
-      if (current == null)
-        return 0;
-
-      if (value.CompareTo(current.Value) == 1 && current.Right != null)
-        return GetNodeToCalculate(current.Right, value);
-      else if (value.CompareTo(current.Value) == 0)
-        return CalculateBalanceFactor(current);
-      else if (value.CompareTo(current.Value) == -1 && current.Left != null)
-        return GetNodeToCalculate(current.Left, value);
-      else
-        return 0;
-    }
-
-    /// <summary>
     /// Converts the tree to an array.
     /// </summary>
     /// <returns>Array with all values of the tree.</returns>
     public T[] ConvertToArray()
     {
+      if (_root == null)
+        return new T[0];
+
       T[] valueArray = new T[Count()];
       int i = 0;
       WriteToArray(_root, ref i, valueArray);
@@ -269,7 +263,7 @@ namespace Tree_Generic
     /// <summary>
     /// Stores the values of all nodes in an array.
     /// </summary>
-    /// <param name="current">The current Node</param>
+    /// <param name="current">The current Node.</param>
     /// <param name="i">Variable to count up the arrays index.</param>
     /// <param name="valueArray">The array to store the values in.</param>
     private void WriteToArray(Node<T> current, ref int i, T[] valueArray)
@@ -285,9 +279,9 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Calls the private FindNodeToDelete().
+    /// Removes the node with the <paramref name="value"/>.
     /// </summary>
-    /// <param name="value">Value of the <paramref name="node"/> that is to be removed from the tree.</param>
+    /// <param name="value">Value of the node that is to be removed from the tree.</param>
     public void Remove(T value)
     {
       FindNodeToDelete(_root, value, null);
@@ -301,8 +295,8 @@ namespace Tree_Generic
     /// of the current node.
     /// Calls RemoveFoundValue() if the value of the current node equals the value that is to be removed.
     /// </summary>
-    /// <param name="current">The current node that is compared to value</param>
-    /// <param name="value">The value of the node that has to be deleted</param>
+    /// <param name="current">The current node that is compared to value.</param>
+    /// <param name="value">The value of the node that has to be deleted.</param>
     private void FindNodeToDelete(Node<T> current, T value, Node<T> parent)
     {
       if (DoesTreeContainValue(_root, value))
@@ -319,25 +313,75 @@ namespace Tree_Generic
         return;
     }
 
-    /// <summary>
-    /// Checks if there are further nodes on the current node that is to be deleted.
-    /// Calls the related Method for each case.
-    /// </summary>
-    /// <param name="current">Node that is to be deleted</param>
-    /// <param name="parent">Parentnode of the node that is to be deleted</param>
-    /// <param name="value">Value of the node that is to be deleted</param>
+    ///<summary>
+    ///Checks if there are further nodes on the current node that is to be deleted.
+    ///Calls the related Method for each case.
+    ///</summary>
+    ///<param name="current">Node that is to be deleted.</param>
+    ///<param name="parent">Parentnode of the node that is to be deleted.</param>
+    ///<param name="value">Value of the node that is to be deleted.</param>
     private void RemoveFoundValue(Node<T> current, Node<T> parent, T value)
     {
-      if (current.Right != null && current.Left == null) //If there is only a node on the right side of current.
-        Add(parent, current.Right);
-
-      else if (current.Right == null && current.Left != null) //If there is only a node on the left side of current.
-        Add(parent, current.Left);
-      else if (current.Right != null && current.Left != null) //If there is a node on both sides of current .
-        HookIn(parent, current, value);
-      else //If there is no node on either side of current.
+      //If there is only a node on the right side of current and parent != root
+      if (current.Right != null && current.Left == null && parent != _root && parent != null)
       {
-        if (value.CompareTo(parent.Value) > 0)
+        if (current == parent.Left)
+          parent.Left = current.Right;
+        else
+          parent.Right = current.Right;
+      }
+
+      //If there is only a node on the left side of current and parent != root.
+      else if (current.Right == null && current.Left != null && parent != _root && parent != null)
+      {
+        if (current == parent.Right)
+          parent.Right = current.Left;
+        else
+          parent.Left = current.Left;
+      }
+
+      //If theres only a node on the right side of current and the parent == root.
+      else if (current.Right != null && current.Left == null && parent == _root && parent != null)
+      {
+        if (current == parent.Left)
+          _root.Left = current.Right;
+        else
+          _root.Right = current.Right;
+      }
+
+      else if (current.Right == null && current.Right == null && parent == _root)
+      {
+        if (current == parent.Right)
+          _root.Right = null;
+        else
+          _root.Left = null;
+      }
+        
+
+      //If theres only a node on the left side of current and parent == root.
+      else if (current.Right == null && current.Left != null && parent == _root && parent != null)
+      {
+        if (current == parent.Right)
+          _root.Right = current.Left;
+        else
+          _root.Left = current.Left;
+      }
+
+      else if (current.Right != null && current.Left != null) //If there is a node on both sides of current.
+        HookIn(parent, current, value);
+
+      //If there is no node on either side of current.
+      else
+      {
+        if (parent == _root) // Geht hier nicht rein, wieso?
+          DeleteRoot();
+        if (parent == _root && current == parent.Right)
+          _root.Right = null;
+
+        else if (parent == _root && current == parent.Left)
+          _root.Left = null;
+
+        else if (value.CompareTo(parent.Value) > 0)
         {
           current = null;
           parent.Right = current;
@@ -350,6 +394,24 @@ namespace Tree_Generic
           parent.Left = current;
         }
       }
+      AutoBalanceTree(null, _root);
+    }
+    
+    private void DeleteRoot()
+    {
+      Node<T> nodeToAdd = _root.Right;
+      if (_root.Right == null && _root.Left == null)
+        return;
+      else if (_root.Right == null && _root.Left != null)
+        _root = _root.Left;
+      else if (_root.Right != null && _root.Left == null)
+        _root = _root.Right;
+      else
+      {
+
+        _root = _root.Left;
+        _root.Right = nodeToAdd;
+      }        
     }
 
     /// <summary>
@@ -358,11 +420,14 @@ namespace Tree_Generic
     /// Stores the branch that has not yet been added and calls
     /// AddOriginalBranch() to hook it to the correct branch of the new tree.
     /// </summary>
-    /// <param name="parent">Parentnode of the current node</param>
-    /// <param name="nodeToDelete">The node that is to be deleted</param>
-    /// <param name="value">The value of the node that is to be deleted</param>
+    /// <param name="parent">Parentnode of the current node.</param>
+    /// <param name="nodeToDelete">The node that is to be deleted.</param>
+    /// <param name="value">The value of the node that is to be deleted.</param>
     private void HookIn(Node<T> parent, Node<T> nodeToDelete, T value)
     {
+
+      //TODO: Check if parent == _root!
+
       Node<T> nodeToAdd = nodeToDelete.Right;
 
       if (parent == null)
@@ -389,16 +454,16 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Calls the private Add() method - needed due to protection level.
+    /// Adds the node with the <paramref name="value"/>.
     /// </summary>
-    /// <param name="element">Element that is to be added by user</param>
-    public void Add(T element)
+    /// <param name="value">Value that is to be added by user.</param>
+    public void Add(T value)
     {
-      if (DoesTreeContainValue(_root, element))
-        throw new ArgumentException("A node with this value already exists!");
+      if (DoesTreeContainValue(_root, value))
+        return;
       else
       {
-        Node<T> nodeToAdd = new Node<T>(element);
+        Node<T> nodeToAdd = new Node<T>(value);
         Add(_root, nodeToAdd);
       }
     }
@@ -407,8 +472,8 @@ namespace Tree_Generic
     /// Checks if there is already a _root, calls AddLeft() or AddRight()
     /// depending on whether the element is bigger or smaller than _root.Value.
     /// </summary>
-    /// <param name="current">Current node that is compared to</param>
-    /// <param name="element">Element to add to the tree</param>
+    /// <param name="current">Current node that is compared to.</param>
+    /// <param name="element">Element to add to the tree.</param>
     private void Add(Node<T> current, Node<T> nodeToAdd)
     {
       if (_root == null)
@@ -422,14 +487,13 @@ namespace Tree_Generic
       }
 
       AutoBalanceTree(null, _root);
-
     }
 
     /// <summary>
-    /// Calls the private DoesTreeContainValue() due to protecion level.
+    /// Checks whether the tree contains the <paramref name="value"/>.
     /// </summary>
-    /// <param name="value">Value to check</param>
-    /// <returns>true if the tree contains the <paramref name="value"/></returns>
+    /// <param name="value">Value to check.</param>
+    /// <returns>true if the tree contains the <paramref name="value"/>.</returns>
     public bool Contains(T value)
     {
       return DoesTreeContainValue(_root, value);
@@ -438,9 +502,9 @@ namespace Tree_Generic
     /// <summary>
     /// Checks whether the tree contains the <paramref name="value"/>.
     /// </summary>
-    /// <param name="current">The current node that is checked</param>
-    /// <param name="value">Value to check</param>
-    /// <returns>true if the tree contains the <paramref name="value"/></returns>
+    /// <param name="current">The current node that is checked.</param>
+    /// <param name="value">Value to check.</param>
+    /// <returns>true if the tree contains the <paramref name="value"/>.</returns>
     private bool DoesTreeContainValue(Node<T> current, T value)
     {
       if (current == null)
@@ -457,19 +521,22 @@ namespace Tree_Generic
     }
 
     /// <summary>
-    /// Calls the private Count() - needed due to protection level.
+    /// Counts the elements in the tree.
     /// </summary>
-    /// <returns>Number of nodes in the tree</returns>
+    /// <returns>Number of nodes in the tree.</returns>
     public int Count()
     {
+      if (_root == null)
+        return 0;
+
       return Count(_root, 0);
     }
 
     /// <summary>
     /// Counts all elements in the tree.
     /// </summary>
-    /// <param name="current"></param>
-    /// <returns>Number of nodes in the tree</returns>
+    /// <param name="current">The curreent node that is checked.</param>
+    /// <returns>Number of nodes in the tree.</returns>
     private int Count(Node<T> current, int numberOfElements)
     {
       if (current.Left != null)
@@ -489,8 +556,8 @@ namespace Tree_Generic
     /// If there is a node on the left side of current: Calls Add again with current.Left
     /// to check whether AddLeft() or AddRight() has to be called next.
     /// </summary>
-    /// <param name="current">Current Node that is compared to</param>
-    /// <param name="element">Value that is to be added</param>
+    /// <param name="current">Current Node that is compared to.</param>
+    /// <param name="element">Value that is to be added.</param>
     private void AddLeft(Node<T> current, Node<T> nodeToAdd)
     {
       if (current.Left != null)
@@ -505,8 +572,8 @@ namespace Tree_Generic
     /// If there is a node on the right side of current: Calls Add() again with current.Right
     /// to check whether AddLeft() or AddRight() has to be called next.
     /// </summary>
-    /// <param name="current">Current Node that is compared to</param>
-    /// <param name="element">Value that is to be added</param>
+    /// <param name="current">Current Node that is compared to.</param>
+    /// <param name="element">Value that is to be added.</param>
     private void AddRight(Node<T> current, Node<T> nodeToAdd)
     {
       if (current.Right != null)

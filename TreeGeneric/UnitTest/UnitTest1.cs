@@ -91,18 +91,26 @@ namespace UnitTest
     [TestMethod]
     public void RightRightTest()
     {
-      //Case that root is not parent:
+      //Case that root is not parent(1):
       var rightRightTree = new Tree<int>();
-      rightRightTree.Add(20);
+      rightRightTree.Add(5);
+      rightRightTree.Add(3);
+      rightRightTree.Add(8);
+      rightRightTree.Add(1);
+      rightRightTree.Add(4);
+      rightRightTree.Add(51);
+      rightRightTree.Add(81);
       rightRightTree.Add(10);
-      rightRightTree.Add(30);
-      rightRightTree.Add(40);
-      rightRightTree.Add(50);
-      Assert.AreEqual(20, rightRightTree.Root.Value);
-      Assert.AreEqual(10, rightRightTree.Root.Left.Value);
-      Assert.AreEqual(40, rightRightTree.Root.Right.Value);
-      Assert.AreEqual(50, rightRightTree.Root.Right.Right.Value);
-      Assert.AreEqual(30, rightRightTree.Root.Right.Left.Value);
+      rightRightTree.Add(25);
+      Assert.AreEqual(5, rightRightTree.Root.Value);
+      Assert.AreEqual(3, rightRightTree.Root.Left.Value);
+      Assert.AreEqual(1, rightRightTree.Root.Left.Left.Value);
+      Assert.AreEqual(4, rightRightTree.Root.Left.Right.Value);
+      Assert.AreEqual(51, rightRightTree.Root.Right.Value);
+      Assert.AreEqual(81, rightRightTree.Root.Right.Right.Value);
+      Assert.AreEqual(10, rightRightTree.Root.Right.Left.Value);
+      Assert.AreEqual(8, rightRightTree.Root.Right.Left.Left.Value);
+      Assert.AreEqual(25, rightRightTree.Root.Right.Left.Right.Value);
 
       //Case that root is parent:
       rightRightTree = new Tree<int>();
@@ -120,9 +128,8 @@ namespace UnitTest
     [TestMethod]
     public void LeftLeftTest()
     {
-      var leftLeftTree = new Tree<int>();
-
       //Case that root is parent:
+      var leftLeftTree = new Tree<int>();      
       leftLeftTree.Add(20);
       leftLeftTree.Add(10);
       leftLeftTree.Add(5);
@@ -137,22 +144,24 @@ namespace UnitTest
 
       //Case that root is not parent:
       leftLeftTree = new Tree<int>();
-      leftLeftTree.Add(20);
-      leftLeftTree.Add(10);
-      leftLeftTree.Add(5);
       leftLeftTree.Add(30);
-      leftLeftTree.Add(4);
-      leftLeftTree.Add(6);
-      leftLeftTree.Add(3);
-      leftLeftTree.Add(2);
-      Assert.AreEqual(10, leftLeftTree.Root.Value);
-      Assert.AreEqual(5, leftLeftTree.Root.Left.Value);
-      Assert.AreEqual(3, leftLeftTree.Root.Left.Left.Value);
-      Assert.AreEqual(20, leftLeftTree.Root.Right.Value);
-      Assert.AreEqual(6, leftLeftTree.Root.Left.Right.Value);
-      Assert.AreEqual(30, leftLeftTree.Root.Right.Right.Value);
-      Assert.AreEqual(2, leftLeftTree.Root.Left.Left.Left.Value);
-      Assert.AreEqual(4, leftLeftTree.Root.Left.Left.Right.Value);
+      leftLeftTree.Add(25);
+      leftLeftTree.Add(35);
+      leftLeftTree.Add(36);
+      leftLeftTree.Add(34);
+      leftLeftTree.Add(20);
+      leftLeftTree.Add(15);
+      leftLeftTree.Add(24);
+      leftLeftTree.Add(23);
+      Assert.AreEqual(30, leftLeftTree.Root.Value);
+      Assert.AreEqual(35, leftLeftTree.Root.Right.Value);
+      Assert.AreEqual(36, leftLeftTree.Root.Right.Right.Value);
+      Assert.AreEqual(34, leftLeftTree.Root.Right.Left.Value);
+      Assert.AreEqual(20, leftLeftTree.Root.Left.Value);
+      Assert.AreEqual(15, leftLeftTree.Root.Left.Left.Value);
+      Assert.AreEqual(24, leftLeftTree.Root.Left.Right.Value);
+      Assert.AreEqual(23, leftLeftTree.Root.Left.Right.Left.Value);
+      Assert.AreEqual(25, leftLeftTree.Root.Left.Right.Right.Value);
     }
 
     /// <summary>
@@ -176,18 +185,7 @@ namespace UnitTest
       Assert.AreEqual(9, arr.Length);
       Assert.AreEqual(5, arr[3]);
     }
-
-    /// <summary>
-    /// Tests if an exception is thrown when the same value is added.
-    /// </summary>
-    [TestMethod, ExpectedException(typeof(ArgumentException))]
-    public void AddExistingTest()
-    {
-      var tree = InitializeIntTree();
-      Assert.IsTrue(tree.Contains(81));
-      tree.Add(81);
-    }
-
+       
     /// <summary>
     /// Checks wheter the count method returns the correct
     /// number of nodes that are contained in the tree.

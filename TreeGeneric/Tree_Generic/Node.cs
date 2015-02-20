@@ -5,7 +5,7 @@ namespace Tree_Generic
   /// <summary>
   /// Represents a node of a tree.
   /// </summary>
-  /// <typeparam name="T">DataType of the value</typeparam>
+  /// <typeparam name="T">DataType of the value.</typeparam>
   public class Node<T> where T : IComparable<T>
   {
     private T _value;
@@ -42,7 +42,7 @@ namespace Tree_Generic
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="value">Value to store in the node</param>
+    /// <param name="value">Value to store in the node.</param>
     public Node(T value)
     {
       Value = value;
