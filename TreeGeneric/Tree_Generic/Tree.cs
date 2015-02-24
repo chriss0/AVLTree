@@ -26,6 +26,9 @@ namespace Tree_Generic
     /// <param name="current">The current node.</param>
     private void AutoBalanceTree(Node<T> previous, Node<T> current)
     {
+      if (_root == null)
+        return;
+
       if (current.Left != null)
         AutoBalanceTree(current, current.Left);
 
@@ -271,8 +274,7 @@ namespace Tree_Generic
       if (current.Left != null)
         WriteToArray(current.Left, ref i, valueArray);
 
-      valueArray[i] = current.Value;
-      i++;
+      valueArray[i++] = current.Value;
 
       if (current.Right != null)
         WriteToArray(current.Right, ref i, valueArray);
@@ -307,150 +309,45 @@ namespace Tree_Generic
         else if (value.CompareTo(current.Value) > 0)
           FindNodeToDelete(current.Right, value, current);
         else
-          RemoveFoundValue(current, parent, value);
+          RemoveFoundValue(current, parent);
       }
       else
         return;
-    }
-
-    ///<summary>
-    ///Checks if there are further nodes on the current node that is to be deleted.
-    ///Calls the related Method for each case.
-    ///</summary>
-    ///<param name="current">Node that is to be deleted.</param>
-    ///<param name="parent">Parentnode of the node that is to be deleted.</param>
-    ///<param name="value">Value of the node that is to be deleted.</param>
-    private void RemoveFoundValue(Node<T> current, Node<T> parent, T value)
-    {
-      //If there is only a node on the right side of current and parent != root
-      if (current.Right != null && current.Left == null && parent != _root && parent != null)
-      {
-        if (current == parent.Left)
-          parent.Left = current.Right;
-        else
-          parent.Right = current.Right;
-      }
-
-      //If there is only a node on the left side of current and parent != root.
-      else if (current.Right == null && current.Left != null && parent != _root && parent != null)
-      {
-        if (current == parent.Right)
-          parent.Right = current.Left;
-        else
-          parent.Left = current.Left;
-      }
-
-      //If theres only a node on the right side of current and the parent == root.
-      else if (current.Right != null && current.Left == null && parent == _root && parent != null)
-      {
-        if (current == parent.Left)
-          _root.Left = current.Right;
-        else
-          _root.Right = current.Right;
-      }
-
-      else if (current.Right == null && current.Right == null && parent == _root)
-      {
-        if (current == parent.Right)
-          _root.Right = null;
-        else
-          _root.Left = null;
-      }
-        
-
-      //If theres only a node on the left side of current and parent == root.
-      else if (current.Right == null && current.Left != null && parent == _root && parent != null)
-      {
-        if (current == parent.Right)
-          _root.Right = current.Left;
-        else
-          _root.Left = current.Left;
-      }
-
-      else if (current.Right != null && current.Left != null) //If there is a node on both sides of current.
-        HookIn(parent, current, value);
-
-      //If there is no node on either side of current.
-      else
-      {
-        if (parent == _root) // Geht hier nicht rein, wieso?
-          DeleteRoot();
-        if (parent == _root && current == parent.Right)
-          _root.Right = null;
-
-        else if (parent == _root && current == parent.Left)
-          _root.Left = null;
-
-        else if (value.CompareTo(parent.Value) > 0)
-        {
-          current = null;
-          parent.Right = current;
-        }
-        else if (value.CompareTo(parent.Value) == 0)
-          throw new Exception("Unexpected matching");
-        else
-        {
-          current = null;
-          parent.Left = current;
-        }
-      }
-      AutoBalanceTree(null, _root);
-    }
-    
-    private void DeleteRoot()
-    {
-      Node<T> nodeToAdd = _root.Right;
-      if (_root.Right == null && _root.Left == null)
-        return;
-      else if (_root.Right == null && _root.Left != null)
-        _root = _root.Left;
-      else if (_root.Right != null && _root.Left == null)
-        _root = _root.Right;
-      else
-      {
-
-        _root = _root.Left;
-        _root.Right = nodeToAdd;
-      }        
     }
 
     /// <summary>
-    /// Adds the nodes that are on the node that is to be deleted to the
-    /// correct side of parent.
-    /// Stores the branch that has not yet been added and calls
-    /// AddOriginalBranch() to hook it to the correct branch of the new tree.
+    /// Removes the found value from the tree and adds the branches to of the removed node
+    /// to the correct place in the tree.
     /// </summary>
-    /// <param name="parent">Parentnode of the current node.</param>
-    /// <param name="nodeToDelete">The node that is to be deleted.</param>
-    /// <param name="value">The value of the node that is to be deleted.</param>
-    private void HookIn(Node<T> parent, Node<T> nodeToDelete, T value)
+    /// <param name="current">The node that is to be deleted</param>
+    /// <param name="parent">The node that has <paramref name="current"/> as its child.</param>
+    private void RemoveFoundValue(Node<T> current, Node<T> parent)
     {
+      Node<T> nodeToAdd = current.Right;
 
-      //TODO: Check if parent == _root!
+      if (current == _root)
+        DeleteRoot();
 
-      Node<T> nodeToAdd = nodeToDelete.Right;
-
-      if (parent == null)
+      else if(current == parent.Right)
       {
-        _root = nodeToDelete.Left;
-        Add(_root, nodeToAdd);
-        return;
-      }
-
-      if (value.CompareTo(parent.Value) > 0)
-      {
-        parent.Right = nodeToDelete.Left;
-        nodeToDelete = nodeToDelete.Left;
-        Add(nodeToDelete, nodeToAdd);
-      }
-      else if (value.CompareTo(parent.Value) < 0)
-      {
-        parent.Left = nodeToDelete.Left;
-        nodeToDelete = nodeToDelete.Left;
-        Add(nodeToDelete, nodeToAdd);
+        parent.Right = current.Left;
+        Add(parent, nodeToAdd);
       }
       else
-        throw new Exception("Unexpected matching values!");
+      {
+        parent.Left = current.Left;
+        Add(parent, nodeToAdd);
+      }
+    }
+
+    /// <summary>
+    /// Deletes the current root and assigns a new node to it.
+    /// </summary>
+    public void DeleteRoot()
+    {
+      Node<T> nodeToAdd = _root.Right;
+      _root = _root.Left;
+      Add(_root, nodeToAdd);      
     }
 
     /// <summary>
@@ -478,6 +375,9 @@ namespace Tree_Generic
     {
       if (_root == null)
         _root = nodeToAdd;
+
+      else if (nodeToAdd == null)
+        return;
       else
       {
         if (nodeToAdd.Value.CompareTo(current.Value) >= 0)
@@ -485,7 +385,6 @@ namespace Tree_Generic
         else
           AddLeft(current, nodeToAdd);
       }
-
       AutoBalanceTree(null, _root);
     }
 
